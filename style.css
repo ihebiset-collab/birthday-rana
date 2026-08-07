@@ -40,16 +40,12 @@ body {
 
 
 #stars {
-
-    position:absolute;
-
-    width:100%;
-    height:100%;
-
-    overflow:hidden;
-
-    z-index:0;
-
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0;
+    pointer-events: none; /* Stars shouldn't block clicks */
 }
 
 
@@ -1428,4 +1424,23 @@ display:block;
     .final-container h2 { font-size: 2.5rem; }
     .final-message { font-size: 0.9rem; padding: 25px; }
     .number { font-size: 8rem; }
+}
+/* =========================
+   Sparkle Animation
+========================= */
+
+@keyframes sparkleFade {
+    0% {
+        opacity: 1;
+        transform: scale(0.5) rotate(0deg);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(2) rotate(180deg) translateY(-50px);
+    }
+}
+
+.sparkle {
+    animation: sparkleFade 1s ease-out forwards;
+    pointer-events: none;
 }

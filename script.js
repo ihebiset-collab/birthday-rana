@@ -5,17 +5,76 @@
 
 const starsContainer = document.getElementById("stars");
 
-// Create stars
+// Create stars with no overlapping
 function createStars() {
-    for (let i = 0; i < 120; i++) {
+    // Clear any existing stars first
+    starsContainer.innerHTML = "";
+    
+    const placedStars = [];
+    const minDistance = 2.5; // Minimum distance between stars in percentage
+    const totalStars = 120;
+    let attempts = 0;
+    const maxAttempts = 1000; // Prevent infinite loop
+    
+    for (let i = 0; i < totalStars; i++) {
+        let x, y;
+        let positionFound = false;
+        attempts = 0;
+        
+        while (!positionFound && attempts < maxAttempts) {
+            attempts++;
+            
+            // Generate random position
+            x = Math.random() * 100;
+            y = Math.random() * 100;
+            
+            // Check if too close to other stars
+            let tooClose = false;
+            for (let placed of placedStars) {
+                const dx = x - placed.x;
+                const dy = y - placed.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                if (distance < minDistance) {
+                    tooClose = true;
+                    break;
+                }
+            }
+            
+            if (!tooClose) {
+                positionFound = true;
+            }
+        }
+        
+        // If we couldn't find a perfect spot, use the best attempt
+        if (!positionFound) {
+            x = Math.random() * 100;
+            y = Math.random() * 100;
+        }
+        
+        // Store this position
+        placedStars.push({ x, y });
+        
+        // Create the star
         const star = document.createElement("div");
         star.className = "star";
-        star.style.left = Math.random() * 100 + "%";
-        star.style.top = Math.random() * 100 + "%";
+        star.style.left = x + "%";
+        star.style.top = y + "%";
         star.style.animationDelay = Math.random() * 5 + "s";
-        star.style.opacity = Math.random();
+        star.style.opacity = Math.random() * 0.5 + 0.3; // 0.3 to 0.8
+        
+        // Add some size variation
+        const size = Math.random() * 2 + 1; // 1px to 3px
+        star.style.width = size + "px";
+        star.style.height = size + "px";
+        
+        // Add some brightness variation
+        const brightness = Math.random() * 0.5 + 0.5;
+        star.style.filter = `brightness(${brightness})`;
+        
         starsContainer.appendChild(star);
     }
+    
+    console.log(`✅ Created ${placedStars.length} stars with no overlapping`);
 }
 
 createStars();
